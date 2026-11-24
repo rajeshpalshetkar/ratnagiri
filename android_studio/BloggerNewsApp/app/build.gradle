@@ -18,7 +18,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
-	buildFeatures {
+    buildFeatures {
         buildConfig = true
     }
     bundle {
@@ -34,8 +34,9 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
 
-    //AndroidX and Google support library
+    // AndroidX and Google support library
     implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'androidx.core:core-splashscreen:1.0.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.recyclerview:recyclerview:1.4.0'
@@ -50,34 +51,33 @@ dependencies {
     implementation 'com.google.android.play:app-update:2.1.0'
     implementation 'com.google.code.gson:gson:2.13.1'
 
-    //Analytics
+    // Analytics
     implementation platform('com.google.firebase:firebase-bom:33.16.0')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-messaging'
 
-    //Ad Network Sdk, see the documentation for other Ad Network Sdk options
+    // Ad Network SDK
     implementation 'com.github.solodroid-dev.ads:admob-ads-sdk:1.+'
 
-    //Push notification
+    // Push notification
     implementation 'com.github.solodroid-dev.push:notification-sdk:1.+'
 
-    //Shimmer Effect
+    // Shimmer Effect
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
-    //REST API
+    // REST API
     implementation 'com.squareup.retrofit2:converter-gson:3.0.0'
     implementation 'com.squareup.retrofit2:retrofit:3.0.0'
     implementation 'com.squareup.okhttp3:okhttp:5.1.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:5.1.0'
 
-    //Image Library
+    // Image Library
     implementation 'com.github.bumptech.glide:glide:4.16.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.16.0'
 
-    //Html parser
+    // HTML parser
     implementation 'org.jsoup:jsoup:1.21.1'
 
-    //File utils
+    // File utils
     implementation 'commons-io:commons-io:2.20.0'
-
 }
