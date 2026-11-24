@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -151,11 +152,19 @@ public class FragmentCategory extends Fragment {
                 return;
             }
             loadingPages = true;
-            RestAdapter.createApiPosts(bloggerId).getPages(apiKey, null).enqueue(new Callback<CallbackPage>() {
+            RestAdapter.createApiPosts(bloggerId).getPages(apiKey, 100, null).enqueue(new Callback<CallbackPage>() {
                 @Override public void onResponse(@NonNull Call<CallbackPage> call, @NonNull Response<CallbackPage> response) {
                     loadingPages = false;
                     CallbackPage body = response.isSuccessful() ? response.body() : null;
+                    if (!response.isSuccessful()) {
+                        String errorDetails = "";
+                        try {
+                            if (response.errorBody() != null) errorDetails = response.errorBody().string();
+                        } catch (Exception ignored) { }
+                        Log.e("RatnagiriPages", "Blogger Pages API HTTP " + response.code() + ": " + errorDetails);
+                    }
                     if (body != null && body.items != null) {
+                        Log.d("RatnagiriPages", "Blogger Pages API returned " + body.items.size() + " pages");
                         pageBySlug.clear();
                         for (Post page : body.items) {
                             String slug = slugOf(page.url);
@@ -172,6 +181,7 @@ public class FragmentCategory extends Fragment {
                     }
                 }
                 @Override public void onFailure(@NonNull Call<CallbackPage> call, @NonNull Throwable t) {
+                    Log.e("RatnagiriPages", "Blogger Pages API request failed", t);
                     loadingPages = false;
                     swipe.setRefreshing(false);
                     showPendingLoadError();
