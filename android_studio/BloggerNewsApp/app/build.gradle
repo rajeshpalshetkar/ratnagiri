@@ -1,0 +1,83 @@
+plugins {
+    id 'com.android.application'
+    id 'com.google.gms.google-services'
+}
+
+android {
+    namespace 'com.app.bloggernewsapp400'
+    compileSdk 36
+    defaultConfig {
+        applicationId "in.digitalmotions.ratnagirinews"
+        minSdk 23
+        targetSdk 36
+        versionCode 12
+        versionName "2.0.1"
+        multiDexEnabled true
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+	buildFeatures {
+        buildConfig = true
+    }
+    bundle {
+        storeArchive {
+            enable = false
+        }
+    }
+    lint {
+        disable 'OldTargetApi', 'GradleDependency', 'GradleDynamicVersion'
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
+
+    //AndroidX and Google support library
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
+    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'androidx.recyclerview:recyclerview:1.4.0'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    implementation 'androidx.work:work-runtime:2.9.0'
+    implementation 'androidx.lifecycle:lifecycle-process:2.7.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime:2.7.0'
+    implementation 'androidx.lifecycle:lifecycle-common-java8:2.7.0'
+    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'com.google.android.flexbox:flexbox:3.0.0'
+    implementation 'com.google.android.play:review:2.0.2'
+    implementation 'com.google.android.play:app-update:2.1.0'
+    implementation 'com.google.code.gson:gson:2.13.1'
+
+    //Analytics
+    implementation platform('com.google.firebase:firebase-bom:33.16.0')
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-messaging'
+
+    //Ad Network Sdk, see the documentation for other Ad Network Sdk options
+    implementation 'com.github.solodroid-dev.ads:admob-ads-sdk:1.+'
+
+    //Push notification
+    implementation 'com.github.solodroid-dev.push:notification-sdk:1.+'
+
+    //Shimmer Effect
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
+
+    //REST API
+    implementation 'com.squareup.retrofit2:converter-gson:3.0.0'
+    implementation 'com.squareup.retrofit2:retrofit:3.0.0'
+    implementation 'com.squareup.okhttp3:okhttp:5.1.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:5.1.0'
+
+    //Image Library
+    implementation 'com.github.bumptech.glide:glide:4.16.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.16.0'
+
+    //Html parser
+    implementation 'org.jsoup:jsoup:1.21.1'
+
+    //File utils
+    implementation 'commons-io:commons-io:2.20.0'
+
+}

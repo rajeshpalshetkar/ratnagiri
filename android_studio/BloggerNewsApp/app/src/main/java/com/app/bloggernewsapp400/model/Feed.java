@@ -1,0 +1,13 @@
+package com.app.bloggernewsapp400.model;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Feed implements Serializable {
+
+    public String xmlns;
+    public List<Category> category = new ArrayList<>();
+    public List<Entry> entry = new ArrayList<>();
+
+}

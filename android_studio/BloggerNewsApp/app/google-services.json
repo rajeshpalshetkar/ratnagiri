@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "493232828875",
+    "project_id": "ratnagiri-news",
+    "storage_bucket": "ratnagiri-news.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:493232828875:android:d727f6f66957ab1a32864e",
+        "android_client_info": {
+          "package_name": "in.digitalmotions.ratnagirinews"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "493232828875-s78kantettpvn8hpq54eqhvre42r7737.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZRt5PnsJVG0Fiqp2wfqKzRruBhrMu4cw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "493232828875-s78kantettpvn8hpq54eqhvre42r7737.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
