@@ -232,10 +232,13 @@ public class ActivityPageDetail extends AppCompatActivity {
     private void displayData(CallbackPageDetail resp) {
 
         Document htmlData = Jsoup.parse(resp.content);
-        Elements elements = htmlData.select("img");
-        if (elements.hasAttr("src")) {
+        Elements elements = htmlData.select("img[src]");
+        LinearLayout imageLayout = findViewById(R.id.lyt_image);
+        String firstImageUrl = elements.isEmpty() ? "" : elements.first().attr("src").trim();
+        if (!firstImageUrl.isEmpty()) {
+            imageLayout.setVisibility(View.VISIBLE);
             Glide.with(this)
-                    .load(elements.get(0).attr("src").replace(" ", "%20"))
+                    .load(firstImageUrl.replace(" ", "%20"))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .placeholder(R.drawable.bg_button_transparent)
                     .centerCrop()
@@ -243,6 +246,7 @@ public class ActivityPageDetail extends AppCompatActivity {
             primaryImage.setVisibility(View.VISIBLE);
         } else {
             primaryImage.setVisibility(View.GONE);
+            imageLayout.setVisibility(View.GONE);
         }
 
         if (htmlData.select("img").first() != null) {
