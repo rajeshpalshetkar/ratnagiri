@@ -74,6 +74,7 @@ public interface ApiInterface {
     @GET("pages")
     Call<CallbackPage> getPages(
             @Query("key") String key,
+            @Query("maxResults") int maxResults,
             @Query("pageToken") String pageToken
     );
 
