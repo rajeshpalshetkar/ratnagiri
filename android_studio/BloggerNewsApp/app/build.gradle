@@ -7,11 +7,11 @@ android {
     namespace 'com.app.bloggernewsapp400'
     compileSdk 36
     defaultConfig {
-        applicationId "in.digitalmotions.ratnagirinews"
+        applicationId "com.app.bloggernewsapp400"
         minSdk 23
         targetSdk 36
         versionCode 12
-        versionName "2.0.1"
+        versionName "4.0.1"
         multiDexEnabled true
     }
     compileOptions {

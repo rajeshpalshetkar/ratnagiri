@@ -62,11 +62,8 @@ public class ActivitySplash extends AppCompatActivity {
         adsManager.initializeAd();
 
         imgSplash = findViewById(R.id.img_splash);
-        if (sharedPref.getIsDarkTheme()) {
-            imgSplash.setImageResource(R.drawable.bg_splash_dark);
-        } else {
-            imgSplash.setImageResource(R.drawable.bg_splash_default);
-        }
+        // Keep the supplied Ratnagiri News identity on the in-app launch screen.
+        imgSplash.setImageResource(R.drawable.ratnagiri_news_logo);
 
         Tools.postDelayed(this::requestConfig, Config.DELAY_SPLASH);
     }
@@ -182,6 +179,15 @@ public class ActivitySplash extends AppCompatActivity {
         if (resp != null) {
             app = resp.app;
             ads = resp.ads;
+            // Use the owner's confirmed production AdMob units, even if an older
+            // remote JSON still contains Google sample/test unit IDs.
+            if (ads != null) {
+                ads.admob_publisher_id = "ca-app-pub-8378317809836373~9172210999";
+                ads.admob_banner_unit_id = "ca-app-pub-8378317809836373/3540610363";
+                ads.admob_interstitial_unit_id = "ca-app-pub-8378317809836373/2032087574";
+                ads.admob_native_unit_id = "ca-app-pub-8378317809836373/9932155321";
+                ads.admob_app_open_ad_unit_id = "ca-app-pub-8378317809836373/9356599934";
+            }
             blog = resp.blog;
             customCategory = resp.custom_category;
 

@@ -27,11 +27,11 @@ public class NavigationAdapter {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return new FragmentPost();
-                case 1:
                     return new FragmentCategory();
-                case 2:
+                case 1:
                     return new FragmentPage();
+                case 2:
+                    return new FragmentPost();
                 case 3:
                     return new FragmentFavorite();
             }

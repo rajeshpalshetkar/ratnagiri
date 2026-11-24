@@ -220,9 +220,9 @@ public class Tools {
                 int itemId = item.getItemId();
                 if (itemId == R.id.navigation_recent) {
                     viewPager.setCurrentItem(0);
-                } else if (itemId == R.id.navigation_category) {
-                    viewPager.setCurrentItem(1);
                 } else if (itemId == R.id.navigation_page) {
+                    viewPager.setCurrentItem(1);
+                } else if (itemId == R.id.navigation_category) {
                     viewPager.setCurrentItem(2);
                 } else if (itemId == R.id.navigation_favorite) {
                     viewPager.setCurrentItem(3);

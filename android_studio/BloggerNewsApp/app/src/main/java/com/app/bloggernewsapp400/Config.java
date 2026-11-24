@@ -13,7 +13,7 @@ public class Config {
     public static final boolean ENABLE_NEW_APP_DESIGN = true;
 
     //if set false, the app will use settings icon from drawable-hdpi folder
-    public static final boolean SET_LAUNCHER_IMAGE_AS_HOME_TOP_RIGHT_ICON = true;
+    public static final boolean SET_LAUNCHER_IMAGE_AS_HOME_TOP_RIGHT_ICON = false;
 
     //"published": Order by the date the post was published
     //"updated": Order by the date the post was last updated

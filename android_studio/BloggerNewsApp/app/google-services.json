@@ -1,36 +1,26 @@
 {
   "project_info": {
-    "project_number": "493232828875",
-    "project_id": "ratnagiri-news",
-    "storage_bucket": "ratnagiri-news.firebasestorage.app"
+    "project_number": "93558122405",
+    "project_id": "solodroid-project-example",
+    "storage_bucket": "solodroid-project-example.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:493232828875:android:d727f6f66957ab1a32864e",
+        "mobilesdk_app_id": "1:93558122405:android:b50427525e52dae4660331",
         "android_client_info": {
-          "package_name": "in.digitalmotions.ratnagirinews"
+          "package_name": "com.app.bloggernewsapp400"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "493232828875-s78kantettpvn8hpq54eqhvre42r7737.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCZRt5PnsJVG0Fiqp2wfqKzRruBhrMu4cw"
+          "current_key": "AIzaSyCmQGxf1CWHhm7FriB1LQBDGX9kJkFDv3w"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "493232828875-s78kantettpvn8hpq54eqhvre42r7737.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }
