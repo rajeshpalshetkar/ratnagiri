@@ -122,7 +122,7 @@ public class FragmentPage extends Fragment {
         } else {
             apiKey = apiKeys.get(sharedPref.getApiKeyPosition());
         }
-        this.callbackCall = RestAdapter.createApiPosts(sharedPref.getBloggerId()).getPages(apiKey, sharedPref.getPageToken());
+        this.callbackCall = RestAdapter.createApiPosts(sharedPref.getBloggerId()).getPages(apiKey, 100, sharedPref.getPageToken());
         this.callbackCall.enqueue(new Callback<CallbackPage>() {
             public void onResponse(@NonNull Call<CallbackPage> call, @NonNull Response<CallbackPage> response) {
                 CallbackPage resp = response.body();
