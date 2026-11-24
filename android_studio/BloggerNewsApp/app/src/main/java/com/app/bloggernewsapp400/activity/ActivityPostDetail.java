@@ -281,10 +281,13 @@ public class ActivityPostDetail extends AppCompatActivity {
     private void displayData(CallbackPostDetail post) {
 
         Document htmlData = Jsoup.parse(post.content);
-        Elements elements = htmlData.select("img");
-        if (elements.hasAttr("src")) {
+        Elements elements = htmlData.select("img[src]");
+        String firstImageUrl = elements.isEmpty() ? "" : elements.first().attr("src").trim();
+        boolean hasMainImage = !firstImageUrl.isEmpty();
+
+        if (hasMainImage) {
             Glide.with(this)
-                    .load(elements.get(0).attr("src").replace(" ", "%20"))
+                    .load(firstImageUrl.replace(" ", "%20"))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .placeholder(R.drawable.bg_button_transparent)
                     .centerCrop()
@@ -294,28 +297,25 @@ public class ActivityPostDetail extends AppCompatActivity {
 
             primaryImage.setOnClickListener(v -> {
                 Intent intent = new Intent(getApplicationContext(), ActivityImageDetail.class);
-                intent.putExtra("image", elements.get(0).attr("src"));
+                intent.putExtra("image", firstImageUrl);
                 startActivity(intent);
                 showInterstitialAd();
             });
-
         } else {
             primaryImage.setVisibility(View.GONE);
-            txtAlphabet.setVisibility(View.VISIBLE);
-            txtAlphabet.setText(post.title.substring(0, 1));
+            txtAlphabet.setVisibility(View.GONE);
         }
 
-        if (Config.FIRST_POST_IMAGE_AS_MAIN_IMAGE) {
-            if (htmlData.select("img").first() != null) {
-                Element element = htmlData.select("img").first();
-                assert element != null;
-                if (element.hasAttr("src")) {
-                    element.remove();
-                }
+        if (Config.FIRST_POST_IMAGE_AS_MAIN_IMAGE && hasMainImage) {
+            Element element = elements.first();
+            if (element != null) {
+                element.remove();
             }
             lytPrimaryImage.setVisibility(View.VISIBLE);
+            lytImage.setVisibility(View.VISIBLE);
         } else {
             lytPrimaryImage.setVisibility(View.GONE);
+            lytImage.setVisibility(View.GONE);
         }
         originalHtmlData = htmlData.toString();
 
