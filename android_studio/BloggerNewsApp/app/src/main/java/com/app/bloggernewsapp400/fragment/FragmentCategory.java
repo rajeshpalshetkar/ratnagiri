@@ -48,6 +48,9 @@ public class FragmentCategory extends Fragment {
     private SwipeRefreshLayout swipe;
     private final Map<String, Post> pageBySlug = new LinkedHashMap<>();
     private final List<PageTile> tiles = new ArrayList<>();
+    private boolean pagesLoaded = false;
+    private boolean loadingPages = false;
+    private PageTile pendingTile = null;
 
     private static class PageTile {
         final String title, description, slug, icon;
@@ -123,25 +126,68 @@ public class FragmentCategory extends Fragment {
     }
 
     private void loadPages() {
-        if (!Tools.isConnect(activity)) { swipe.setRefreshing(false); return; }
+        if (loadingPages || pagesLoaded) {
+            swipe.setRefreshing(false);
+            return;
+        }
+        if (!Tools.isConnect(activity)) {
+            swipe.setRefreshing(false);
+            showPendingLoadError();
+            return;
+        }
         try {
-            List<String> keys = Arrays.asList(sharedPref.getAPIKey().replace(", ", ",").split(","));
-            if (keys.isEmpty() || sharedPref.getBloggerId() == null) { swipe.setRefreshing(false); return; }
-            RestAdapter.createApiPosts(sharedPref.getBloggerId()).getPages(keys.get(0), null).enqueue(new Callback<CallbackPage>() {
+            String bloggerId = sharedPref.getBloggerId();
+            String configuredKeys = sharedPref.getAPIKey();
+            if (bloggerId == null || bloggerId.trim().isEmpty() || configuredKeys == null || configuredKeys.trim().isEmpty()) {
+                swipe.setRefreshing(false);
+                showPendingLoadError();
+                return;
+            }
+            List<String> keys = Arrays.asList(configuredKeys.replace(", ", ",").split(","));
+            String apiKey = keys.get(0).trim();
+            if (apiKey.isEmpty()) {
+                swipe.setRefreshing(false);
+                showPendingLoadError();
+                return;
+            }
+            loadingPages = true;
+            RestAdapter.createApiPosts(bloggerId).getPages(apiKey, null).enqueue(new Callback<CallbackPage>() {
                 @Override public void onResponse(@NonNull Call<CallbackPage> call, @NonNull Response<CallbackPage> response) {
-                    CallbackPage body = response.body();
+                    loadingPages = false;
+                    CallbackPage body = response.isSuccessful() ? response.body() : null;
                     if (body != null && body.items != null) {
                         pageBySlug.clear();
                         for (Post page : body.items) {
                             String slug = slugOf(page.url);
-                            if (slug != null) pageBySlug.put(slug, page);
+                            if (slug != null && page.id != null) pageBySlug.put(slug, page);
                         }
+                        pagesLoaded = true;
                     }
                     swipe.setRefreshing(false);
+                    if (pendingTile != null) {
+                        PageTile requested = pendingTile;
+                        pendingTile = null;
+                        if (pagesLoaded) openTile(requested);
+                        else showPendingLoadError();
+                    }
                 }
-                @Override public void onFailure(@NonNull Call<CallbackPage> call, @NonNull Throwable t) { swipe.setRefreshing(false); }
+                @Override public void onFailure(@NonNull Call<CallbackPage> call, @NonNull Throwable t) {
+                    loadingPages = false;
+                    swipe.setRefreshing(false);
+                    showPendingLoadError();
+                }
             });
-        } catch (Exception e) { swipe.setRefreshing(false); }
+        } catch (Exception e) {
+            loadingPages = false;
+            swipe.setRefreshing(false);
+            showPendingLoadError();
+        }
+    }
+
+    private void showPendingLoadError() {
+        if (pendingTile != null && isAdded()) {
+            Toast.makeText(activity, "माहिती सध्या मिळत नाही. कृपया थोड्या वेळाने पुन्हा प्रयत्न करा.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private String slugOf(String url) {
@@ -150,13 +196,20 @@ public class FragmentCategory extends Fragment {
     }
 
     private void openTile(PageTile tile) {
+        if (!pagesLoaded) {
+            pendingTile = tile;
+            Toast.makeText(activity, "माहिती लोड होत आहे. कृपया थोडा वेळ थांबा.", Toast.LENGTH_SHORT).show();
+            loadPages();
+            return;
+        }
         Post page = pageBySlug.get(tile.slug);
         if (page == null || page.id == null) {
-            Toast.makeText(activity, "माहिती लोड करण्यासाठी इंटरनेट तपासा आणि पुन्हा प्रयत्न करा.", Toast.LENGTH_SHORT).show();
-            loadPages(); return;
+            Toast.makeText(activity, "हे माहिती पान सध्या उपलब्ध नाही.", Toast.LENGTH_SHORT).show();
+            return;
         }
         Intent intent = new Intent(activity, ActivityPageDetail.class);
-        intent.putExtra("id", page.id); intent.putExtra("title", page.title == null ? tile.title : page.title);
+        intent.putExtra("id", page.id);
+        intent.putExtra("title", page.title == null ? tile.title : page.title);
         startActivity(intent);
     }
 
