@@ -1,0 +1,49 @@
+name: Weekly Ratnagiri Police Data Update
+
+on:
+  schedule:
+    # Every Sunday at 00:30 UTC = 06:00 India Standard Time
+    - cron: "30 0 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: weekly-ratnagiri-police-data
+  cancel-in-progress: false
+
+jobs:
+  update-police-data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install playwright openpyxl
+          python -m playwright install --with-deps chromium
+
+      - name: Collect official police station data
+        run: python scripts/collect_police_stations.py
+
+      - name: Commit updated Excel and JSON only when changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/police_stations.xlsx data/police_stations.json
+          if git diff --cached --quiet; then
+            echo "No data changes detected."
+          else
+            git commit -m "chore: weekly Ratnagiri police data refresh"
+            git push
+          fi
