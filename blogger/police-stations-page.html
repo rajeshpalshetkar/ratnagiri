@@ -1,7 +1,7 @@
 <!-- Ratnagiri Police Directory - Blogger HTML page -->
 <div id="rpd-directory">
-<style>
-#rpd-directory{max-width:1100px;margin:18px auto;font-family:Arial,"Noto Sans Devanagari",sans-serif;color:#17243a}
+<style>@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap");
+#rpd-directory{max-width:1100px;margin:18px auto;font-family:"Noto Sans Devanagari",Arial,sans-serif;color:#17243a}
 #rpd-directory *{box-sizing:border-box}
 #rpd-directory .hero{background:linear-gradient(130deg,#102747,#1d426e);border-bottom:4px solid #d7ad4d;color:#fff;padding:24px;border-radius:15px}
 #rpd-directory .hero h2{margin:0 0 8px;color:#fff;font-size:25px}
@@ -34,7 +34,7 @@
 <script>
 (function(){
 var DATA_URL="https://raw.githubusercontent.com/rajeshpalshetkar/ratnagiri/main/data/police_stations.json";
-var names={37:"सायबर",38:"देवरुख",39:"लांजा",40:"राजापूर",41:"नाटे",42:"पूर्णगड",43:"रत्नागिरी शहर",44:"रत्नागिरी ग्रामीण",45:"जयगड",46:"संगमेश्वर",47:"गुहागर",48:"सावर्डे",49:"अलोरे - शिरगाव",50:"चिपळूण",51:"खेड",52:"दाभोळ",53:"दापोली",54:"मंडणगड",55:"बाणकोट"};
+var names={37:"\u0938\u093e\u092f\u092c\u0930",38:"\u0926\u0947\u0935\u0930\u0941\u0916",39:"\u0932\u093e\u0902\u091c\u093e",40:"\u0930\u093e\u091c\u093e\u092a\u0942\u0930",41:"\u0928\u093e\u091f\u0947",42:"\u092a\u0942\u0930\u094d\u0923\u0917\u0921",43:"\u0930\u0924\u094d\u0928\u093e\u0917\u093f\u0930\u0940 \u0936\u0939\u0930",44:"\u0930\u0924\u094d\u0928\u093e\u0917\u093f\u0930\u0940 \u0917\u094d\u0930\u093e\u092e\u0940\u0923",45:"\u091c\u092f\u0917\u0921",46:"\u0938\u0902\u0917\u092e\u0947\u0936\u094d\u0935\u0930",47:"\u0917\u0941\u0939\u093e\u0917\u0930",48:"\u0938\u093e\u0935\u0930\u094d\u0921\u0947",49:"\u0905\u0932\u094b\u0930\u0947 - \u0936\u093f\u0930\u0917\u093e\u0935",50:"\u091a\u093f\u092a\u0933\u0942\u0923",51:"\u0916\u0947\u0921",52:"\u0926\u093e\u092d\u094b\u0933",53:"\u0926\u093e\u092a\u094b\u0932\u0940",54:"\u092e\u0902\u0921\u0923\u0917\u0921",55:"\u092c\u093e\u0923\u0915\u094b\u091f"};
 var root=document.getElementById("rpd-directory"),cards=root.querySelector("#rpd-cards"),count=root.querySelector("#rpd-count"),search=root.querySelector("#rpd-search"),items=[];
 function el(tag,cls,txt){var n=document.createElement(tag);if(cls)n.className=cls;if(txt!==undefined)n.textContent=txt;return n;}
 function addLine(parent,label,value){if(!value)return;var p=el("div","line");var b=el("b","",label+": ");p.appendChild(b);p.appendChild(document.createTextNode(value));parent.appendChild(p);}
@@ -42,27 +42,27 @@ function link(parent,label,url){if(!url)return;var a=el("a","btn",label);a.href=
 function render(){
 var q=(search.value||"").toLocaleLowerCase("mr-IN").trim();
 var found=items.filter(function(x){return [x.displayName,x.officer_name,x.designation,x.mobile,x.alternative_phone,x.email].join(" ").toLocaleLowerCase("mr-IN").indexOf(q)>=0;});
-count.textContent=found.length+" पैकी "+items.length+" पोलीस ठाण्यांच्या नोंदी";
+count.textContent=found.length+" \u092a\u0948\u0915\u0940 "+items.length+" \u092a\u094b\u0932\u0940\u0938 \u0920\u093e\u0923\u094d\u092f\u093e\u0902\u091a\u094d\u092f\u093e \u0928\u094b\u0902\u0926\u0940";
 cards.innerHTML="";
-if(!found.length){cards.appendChild(el("div","notice","शोधाशी जुळणारे पोलीस ठाणे सापडले नाही."));return;}
+if(!found.length){cards.appendChild(el("div","notice","\u0936\u094b\u0927\u093e\u0936\u0940 \u091c\u0941\u0933\u0923\u093e\u0930\u0947 \u092a\u094b\u0932\u0940\u0938 \u0920\u093e\u0923\u0947 \u0938\u093e\u092a\u0921\u0932\u0947 \u0928\u093e\u0939\u0940."));return;}
 found.forEach(function(x){
 var card=el("article","card"),head=el("div","cardhead"),body=el("div","body"),photo;
 if(x.station_image){photo=el("img","photo");photo.src=x.station_image;photo.alt=x.displayName;photo.loading="lazy";photo.referrerPolicy="no-referrer";head.appendChild(photo);}
-var info=el("div","");info.appendChild(el("h3","",x.displayName));info.appendChild(el("div","role",x.designation||"अधिकारी तपशील"));head.appendChild(info);card.appendChild(head);
-addLine(body,"अधिकारी",x.officer_name);addLine(body,"मोबाईल",x.mobile);addLine(body,"पर्यायी फोन",x.alternative_phone);addLine(body,"ई-मेल",x.email);
+var info=el("div","");info.appendChild(el("h3","",x.displayName));info.appendChild(el("div","role",x.designation||"\u0905\u0927\u093f\u0915\u093e\u0930\u0940 \u0924\u092a\u0936\u0940\u0932"));head.appendChild(info);card.appendChild(head);
+addLine(body,"\u0905\u0927\u093f\u0915\u093e\u0930\u0940",x.officer_name);addLine(body,"\u092e\u094b\u092c\u093e\u0908\u0932",x.mobile);addLine(body,"\u092a\u0930\u094d\u092f\u093e\u092f\u0940 \u092b\u094b\u0928",x.alternative_phone);addLine(body,"\u0908-\u092e\u0947\u0932",x.email);
 var actions=el("div","actions");
-if(x.mobile){var tel=el("a","btn","कॉल करा");tel.href="tel:"+x.mobile.replace(/[^0-9+]/g,"");actions.appendChild(tel);}
-if(x.email){var mail=el("a","btn","ई-मेल");mail.href="mailto:"+x.email;actions.appendChild(mail);}
-link(actions,"नकाशा",x.map_url);link(actions,"अधिकृत पेज",x.source_url||"https://ratnagiripolice.gov.in/");
+if(x.mobile){var tel=el("a","btn","\u0915\u0949\u0932 \u0915\u0930\u093e");tel.href="tel:"+x.mobile.replace(/[^0-9+]/g,"");actions.appendChild(tel);}
+if(x.email){var mail=el("a","btn","\u0908-\u092e\u0947\u0932");mail.href="mailto:"+x.email;actions.appendChild(mail);}
+link(actions,"\u0928\u0915\u093e\u0936\u093e",x.map_url);link(actions,"\u0905\u0927\u093f\u0915\u0943\u0924 \u092a\u0947\u091c",x.source_url||"https://ratnagiripolice.gov.in/");
 body.appendChild(actions);card.appendChild(body);cards.appendChild(card);
 });
 }
-fetch(DATA_URL,{cache:"no-store"}).then(function(r){if(!r.ok)throw new Error("JSON डेटा मिळाला नाही ("+r.status+")");return r.json();}).then(function(data){
-if(!Array.isArray(data))throw new Error("डेटा स्वरूप चुकीचे आहे");
+fetch(DATA_URL,{cache:"no-store"}).then(function(r){if(!r.ok)throw new Error("JSON \u0921\u0947\u091f\u093e \u092e\u093f\u0933\u093e\u0932\u093e \u0928\u093e\u0939\u0940 ("+r.status+")");return r.json();}).then(function(data){
+if(!Array.isArray(data))throw new Error("\u0921\u0947\u091f\u093e \u0938\u094d\u0935\u0930\u0942\u092a \u091a\u0941\u0915\u0940\u091a\u0947 \u0906\u0939\u0947");
 items=data.filter(function(x){return names[Number(x.id)];}).map(function(x){x.displayName=names[Number(x.id)];return x;});
 items.sort(function(a,b){return Number(a.id)-Number(b.id);});
 render();
-}).catch(function(err){count.textContent="डेटा लोड झाला नाही";cards.appendChild(el("div","error",err.message+" कृपया पेज रिफ्रेश करा."));});
+}).catch(function(err){count.textContent="\u0921\u0947\u091f\u093e \u0932\u094b\u0921 \u091d\u093e\u0932\u093e \u0928\u093e\u0939\u0940";cards.appendChild(el("div","error",err.message+" \u0915\u0943\u092a\u092f\u093e \u092a\u0947\u091c \u0930\u093f\u092b\u094d\u0930\u0947\u0936 \u0915\u0930\u093e."));});
 search.addEventListener("input",render);
 })();
 </script>
