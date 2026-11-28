@@ -40,7 +40,7 @@ HEADERS = [
 LABELS = dict(zip(FIELDS, HEADERS))
 
 def clean(value):
-    return re.sub(r"\\s+", " ", value or "").strip()
+    return re.sub(r"\s+", " ", value or "").strip()
 
 def first_text(page, selectors):
     for selector in selectors:
@@ -115,12 +115,13 @@ def scrape_one(page, station_id, expected_name, checked_at):
             ".about-style2__content h2"
         ])
         if heading:
-            result["station_name"] = clean(heading.replace("\\n", " "))
+            result["station_name"] = clean(heading.replace("\n", " "))
 
-        result["station_image"] = urljoin(BASE, first_attr(page, [
+        station_image = first_attr(page, [
             ".about-style2__img .inner img",
             ".about-style2__img img"
-        ], "src"))
+        ], "src")
+        result["station_image"] = urljoin(BASE, station_image) if station_image else ""
         result["officer_name"] = first_text(page, [
             ".officer-profile-card .team-stye1__single-content h2 a",
             ".officer-profile-card .team-style1__single-content h2 a",
@@ -131,10 +132,11 @@ def scrape_one(page, station_id, expected_name, checked_at):
             ".officer-profile-card .designation",
             ".officer-details-card .designation"
         ])
-        result["officer_image"] = urljoin(BASE, first_attr(page, [
+        officer_image = first_attr(page, [
             ".officer-profile-card .team-style1__single-img-inner img",
             ".officer-profile-card img"
-        ], "src"))
+        ], "src")
+        result["officer_image"] = urljoin(BASE, officer_image) if officer_image else ""
 
         # Contact links can appear in the officer card or the details table.
         mail_href = first_attr(page, [
