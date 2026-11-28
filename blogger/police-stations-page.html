@@ -1,0 +1,115 @@
+<!-- Blogger Page: Ratnagiri Police Stations Directory
+     Paste the contents of this file into Blogger Page > HTML view.
+     IMPORTANT: Keep APPROVED_IDS empty until each record is checked against the official source.
+-->
+<div id="ratnagiri-police-directory" class="rpd-wrap">
+  <style>
+    #ratnagiri-police-directory{font-family:Arial,"Noto Sans Devanagari",sans-serif;color:#18243a;max-width:1100px;margin:20px auto}
+    #ratnagiri-police-directory *{box-sizing:border-box}
+    #ratnagiri-police-directory .rpd-head{background:linear-gradient(135deg,#102747,#1b3d68);color:#fff;padding:25px 22px;border-radius:16px;border-bottom:4px solid #d5ad52}
+    #ratnagiri-police-directory .rpd-head h2{margin:0 0 8px;font-size:25px;color:#fff}
+    #ratnagiri-police-directory .rpd-head p{margin:0;color:#e8edf5;line-height:1.6}
+    #ratnagiri-police-directory .rpd-tools{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}
+    #ratnagiri-police-directory input{flex:1;min-width:220px;padding:13px 14px;border:1px solid #ccd4df;border-radius:9px;font-size:15px}
+    #ratnagiri-police-directory .rpd-count{font-size:13px;color:#5d6878;margin:4px 0 14px}
+    #ratnagiri-police-directory .rpd-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:15px}
+    #ratnagiri-police-directory .rpd-card{border:1px solid #e0e5ec;border-radius:13px;overflow:hidden;background:#fff;box-shadow:0 4px 15px rgba(16,39,71,.07)}
+    #ratnagiri-police-directory .rpd-top{display:flex;gap:13px;align-items:center;padding:15px;background:#f6f8fb}
+    #ratnagiri-police-directory .rpd-photo{width:66px;height:66px;object-fit:cover;border-radius:10px;background:#e5eaf1}
+    #ratnagiri-police-directory .rpd-card h3{font-size:18px;margin:0 0 5px;color:#102747}
+    #ratnagiri-police-directory .rpd-role{font-size:12px;color:#667386}
+    #ratnagiri-police-directory .rpd-body{padding:15px}
+    #ratnagiri-police-directory .rpd-line{font-size:14px;line-height:1.55;margin:7px 0;overflow-wrap:anywhere}
+    #ratnagiri-police-directory .rpd-line b{color:#4c596b}
+    #ratnagiri-police-directory a{color:#174f91;text-decoration:none}
+    #ratnagiri-police-directory a:hover{text-decoration:underline}
+    #ratnagiri-police-directory .rpd-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
+    #ratnagiri-police-directory .rpd-btn{display:inline-block;background:#17365d;color:#fff!important;padding:9px 12px;border-radius:7px;font-size:13px}
+    #ratnagiri-police-directory .rpd-note{padding:16px;border:1px solid #ead9a9;background:#fffaf0;border-radius:10px;line-height:1.65}
+    #ratnagiri-police-directory .rpd-error{padding:14px;background:#fff1f1;border:1px solid #efcaca;border-radius:9px;color:#8a2525}
+    #ratnagiri-police-directory .rpd-foot{font-size:12px;color:#687386;line-height:1.6;margin-top:18px}
+    @media(max-width:520px){#ratnagiri-police-directory .rpd-head h2{font-size:21px}#ratnagiri-police-directory .rpd-grid{grid-template-columns:1fr}}
+  </style>
+
+  <div class="rpd-head">
+    <h2>रत्नागिरी जिल्हा पोलीस ठाणे संपर्क निर्देशिका</h2>
+    <p>पोलीस ठाणे, अधिकारी आणि संपर्कविषयक सार्वजनिक माहिती</p>
+  </div>
+
+  <div class="rpd-tools">
+    <input id="rpd-search" type="search" placeholder="पोलीस ठाणे, अधिकारी किंवा तालुका शोधा..." aria-label="पोलीस ठाणे शोधा">
+  </div>
+  <div id="rpd-count" class="rpd-count" aria-live="polite">माहिती लोड होत आहे...</div>
+  <div id="rpd-message" class="rpd-note">माहिती लोड होत आहे...</div>
+  <div id="rpd-grid" class="rpd-grid"></div>
+  <div class="rpd-foot">माहितीचा स्रोत: <a href="https://ratnagiripolice.gov.in/" target="_blank" rel="noopener">रत्नागिरी पोलीस अधिकृत संकेतस्थळ</a>. संपर्क करण्यापूर्वी अधिकृत स्रोतावरून तपशील पुन्हा तपासा. ही निर्देशिका आपत्कालीन सेवांचा पर्याय नाही.</div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var DATA_URL = "https://raw.githubusercontent.com/rajeshpalshetkar/ratnagiri/main/data/police_stations.json";
+  // मानवी पडताळणी पूर्ण झालेल्या नोंदींचे ID येथेच जोडा. सुरुवातीला रिकामे ठेवले आहेत.
+  var APPROVED_IDS = [];
+  var root = document.getElementById("ratnagiri-police-directory");
+  if (!root) return;
+  var grid = root.querySelector("#rpd-grid");
+  var message = root.querySelector("#rpd-message");
+  var count = root.querySelector("#rpd-count");
+  var search = root.querySelector("#rpd-search");
+  var records = [];
+
+  function esc(value){
+    return String(value == null ? "" : value).replace(/[&<>"']/g,function(ch){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch];
+    });
+  }
+  function line(label,value){
+    if(!value) return "";
+    return '<div class="rpd-line"><b>'+esc(label)+':</b> '+esc(value)+'</div>';
+  }
+  function render(){
+    var q = (search.value || "").trim().toLocaleLowerCase("mr-IN");
+    var filtered = records.filter(function(x){
+      var hay = [x.station_name,x.officer_name,x.designation,x.city,x.division,x.mobile,x.email].join(" ").toLocaleLowerCase("mr-IN");
+      return hay.indexOf(q) !== -1;
+    });
+    count.textContent = filtered.length + " पोलीस ठाण्यांच्या नोंदी";
+    grid.innerHTML = filtered.map(function(x){
+      var photo = x.station_image || "";
+      var photoHtml = photo ? '<img class="rpd-photo" src="'+esc(photo)+'" alt="'+esc(x.station_name)+'" loading="lazy" referrerpolicy="no-referrer">' : '<div class="rpd-photo"></div>';
+      var phone = (x.mobile || "").replace(/[^0-9+]/g,"");
+      var actions = "";
+      if(phone) actions += '<a class="rpd-btn" href="tel:'+esc(phone)+'">कॉल करा</a>';
+      if(x.email) actions += '<a class="rpd-btn" href="mailto:'+esc(x.email)+'">ई-मेल</a>';
+      if(x.map_url) actions += '<a class="rpd-btn" href="'+esc(x.map_url)+'" target="_blank" rel="noopener">नकाशा</a>';
+      actions += '<a class="rpd-btn" href="'+esc(x.source_url || "https://ratnagiripolice.gov.in/")+'" target="_blank" rel="noopener">अधिकृत माहिती</a>';
+      return '<article class="rpd-card"><div class="rpd-top">'+photoHtml+'<div><h3>'+esc(x.station_name || "पोलीस ठाणे")+'</h3><div class="rpd-role">'+esc(x.designation || "अधिकारी तपशील")+'</div></div></div><div class="rpd-body">'+
+        line("अधिकारी",x.officer_name)+line("तालुका / शहर",x.city)+line("विभाग",x.division)+line("मोबाईल",x.mobile)+line("पर्यायी फोन",x.alternative_phone)+line("ई-मेल",x.email)+
+        '<div class="rpd-actions">'+actions+'</div></div></article>';
+    }).join("");
+    if(!filtered.length) grid.innerHTML = '<div class="rpd-note">शोधाशी जुळणारी नोंद सापडली नाही.</div>';
+  }
+
+  if(!APPROVED_IDS.length){
+    count.textContent = "१९ नोंदींची यादी तयार आहे; सार्वजनिक प्रदर्शनासाठी पडताळणी बाकी.";
+    message.innerHTML = "स्वयंचलित संकलित डेटामध्ये काही नोंदींचे नाव/शहर जुळत नसल्याचे आढळले आहे. अधिकृत पानांशी मानवी पडताळणी झाल्यानंतरच संबंधित ID <b>APPROVED_IDS</b> मध्ये जोडा. तोपर्यंत नोंदी सार्वजनिकपणे दाखवल्या जाणार नाहीत.";
+    return;
+  }
+
+  fetch(DATA_URL,{cache:"no-store"})
+    .then(function(response){if(!response.ok) throw new Error("डेटा फाइल उपलब्ध नाही ("+response.status+")"); return response.json();})
+    .then(function(data){
+      if(!Array.isArray(data)) throw new Error("डेटा फाइलचा फॉरमॅट अपेक्षित स्वरूपात नाही.");
+      records = data.filter(function(x){return APPROVED_IDS.indexOf(Number(x.id)) !== -1;});
+      message.style.display = "none";
+      render();
+    })
+    .catch(function(error){
+      count.textContent = "डेटा उपलब्ध नाही";
+      message.className = "rpd-error";
+      message.textContent = error.message + " कृपया थोड्या वेळाने पुन्हा प्रयत्न करा.";
+    });
+  search.addEventListener("input",render);
+})();
+</script>
